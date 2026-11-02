@@ -142,6 +142,7 @@ async function init() {
     const boxWeight = Math.min(1, Math.max(0, (tl.time() - 7.35) / 0.45));
     const cream = Math.max(heroWeight, boxWeight);
     glowEl.style.opacity = cream;
+    glowEl.style.visibility = cream > 0.001 ? '' : 'hidden';   // blurred blooms are costly to composite, even when transparent
     spotEl.style.opacity = 1 - cream;
     const onStage = Math.min(6, Math.max(0, Math.round(tl.time()) - 1));
     spot.x += ((onStage % 2 === 0 ? 72 : 28) - spot.x) * 0.06;
@@ -262,7 +263,8 @@ async function init() {
     swatches.style.opacity = overflow > 60 || heroWeight > 0.5 ? 0 : '';
     navEl.classList.toggle('is-dark', footerEl.getBoundingClientRect().top < 40);   // the hero has its own index
 
-    stage.renderer.render(stage.scene, stage.camera);
+    // once the footer covers the whole screen there is nothing to draw
+    if (overflow < window.innerHeight) stage.renderer.render(stage.scene, stage.camera);
   });
 
   const loader = document.getElementById('loader');

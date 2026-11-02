@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
+import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import { rng } from '../utils/rng.js';
 
 // The bar stands upright: x = width, y = length, z = thickness (chocolate faces +z).
@@ -19,6 +20,8 @@ const BOX_Z = 0.06;
 const FOIL_Y = BAR.L / 2 - BAR.BARE - BAR.FOIL_L / 2;         // foil centre, relative to the chocolate
 const PIECE = { r: 0, c: 2 };                                // the corner that snaps off
 
+const cellPos = (r, c) => new THREE.Vector3(-BAR.W / 2 + CW / 2 + c * CW, BAR.L / 2 - CH / 2 - r * CH, 0);
+
 let G = null;
 function geometries() {
   if (G) return G;
@@ -37,11 +40,21 @@ function geometries() {
     bit: new THREE.IcosahedronGeometry(0.032, 0),
     foil
   };
+  // every cell except the snap-off corner, merged into one mesh: 1 draw call instead of 34 per bar
+  const parts = [];
+  for (let r = 0; r < BAR.ROWS; r++) {
+    for (let c = 0; c < BAR.COLS; c++) {
+      if (r === PIECE.r && c === PIECE.c) continue;
+      const at = cellPos(r, c);
+      parts.push(G.tile.clone().translate(at.x, at.y, 0), G.seg.clone().translate(at.x, at.y, SEG_Z));
+    }
+  }
+  G.slab = mergeGeometries(parts);
+  parts.forEach(p => p.dispose());
   return G;
 }
 
 const foilMat = new THREE.MeshPhysicalMaterial({ color: '#e2bd72', metalness: 1, roughness: 0.3 });
-const cellPos = (r, c) => new THREE.Vector3(-BAR.W / 2 + CW / 2 + c * CW, BAR.L / 2 - CH / 2 - r * CH, 0);
 
 export function createBar(p, frontTex, backTex, index) {
   const g = geometries();
@@ -58,20 +71,15 @@ export function createBar(p, frontTex, backTex, index) {
   const inner = new THREE.Group();     // the chocolate, slides along y
   group.add(inner);
 
-  // chocolate: one tile + raised segment per cell, so the corner piece can break away cleanly
-  let piece = null;
-  const pieceBase = new THREE.Vector3();
-  for (let r = 0; r < BAR.ROWS; r++) {
-    for (let c = 0; c < BAR.COLS; c++) {
-      const cell = new THREE.Group();
-      cell.position.copy(cellPos(r, c));
-      const seg = new THREE.Mesh(g.seg, chocMat);
-      seg.position.z = SEG_Z;
-      cell.add(new THREE.Mesh(g.tile, chocMat), seg);
-      inner.add(cell);
-      if (r === PIECE.r && c === PIECE.c) { piece = cell; pieceBase.copy(cell.position); }
-    }
-  }
+  // chocolate: the merged slab, plus the corner cell kept separate so it can break away
+  inner.add(new THREE.Mesh(g.slab, chocMat));
+  const piece = new THREE.Group();
+  const pieceBase = cellPos(PIECE.r, PIECE.c);
+  piece.position.copy(pieceBase);
+  const pieceSeg = new THREE.Mesh(g.seg, chocMat);
+  pieceSeg.position.z = SEG_Z;
+  piece.add(new THREE.Mesh(g.tile, chocMat), pieceSeg);
+  inner.add(piece);
 
   // inclusions scattered over the segment faces
   const bits = new THREE.InstancedMesh(g.bit, new THREE.MeshStandardMaterial({ color: p.bits, roughness: 0.5 }), 34);

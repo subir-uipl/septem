@@ -1,6 +1,6 @@
 {
   "name": "septem",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "type": "module",
   "description": "Septem craft chocolate: a colourful scroll-driven 3D site for seven chocolate bars.",
@@ -19,5 +19,6 @@
   "devDependencies": {
     "sass": "^1.80.6",
     "vite": "^5.4.10"
-  }
+  },
+  "homepage": "https://subir-uipl.github.io/septem/"
 }
