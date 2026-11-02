@@ -1,0 +1,146 @@
+@use 'tokens' as *;
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  font: 600 25px/1 $serif;
+  letter-spacing: -.01em;
+
+  &__mark { width: 28px; height: 28px; }
+}
+
+// buttons invert the current palette, so they always contrast with the section
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 26px;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--bg);
+  font: 600 15px/1 $sans;
+  white-space: nowrap;
+  transition: transform .35s $ease, box-shadow .35s $ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 16px 34px -14px color-mix(in srgb, var(--ink) 70%, transparent);
+  }
+
+  &--sm { padding: 12px 20px; font-size: 13px; }
+}
+
+// flavour swatches on the right edge
+.swatches {
+  position: fixed;
+  right: 26px;
+  top: 50%;
+  translate: 0 -50%;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  transition: opacity .4s;
+
+  a {
+    position: relative;
+    display: block;
+    width: 10px;
+    height: 10px;
+    border-radius: 6px;
+    background: var(--c);
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--ink) 28%, transparent);
+    transition: height .5s $ease, box-shadow .3s;
+
+    &.is-active {
+      height: 32px;
+      box-shadow: 0 0 0 2px var(--ink);
+    }
+  }
+
+  span {
+    position: absolute;
+    right: calc(100% + 14px);
+    top: 50%;
+    translate: 0 -50%;
+    padding: 6px 11px;
+    border-radius: 999px;
+    background: var(--ink);
+    color: var(--bg);
+    font: 600 11px/1 $sans;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    opacity: 0;
+    transform: translateX(8px);
+    pointer-events: none;
+    transition: opacity .3s, transform .45s $ease;
+  }
+
+  a:hover span { opacity: 1; transform: none; }
+
+  @include mobile {
+    right: 10px;
+    gap: 8px;
+    span { display: none; }
+  }
+}
+
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 28px;
+  translate: -50% 0;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 22px;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--bg);
+  font: 600 14px/1 $sans;
+  opacity: 0;
+  visibility: hidden;
+
+  i { width: 12px; height: 12px; border-radius: 50%; }
+}
+
+.loader {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  background: $cream;
+  color: $cocoa;
+
+  &__mark {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto;
+    animation: loader-spin 2.4s $ease infinite;
+  }
+
+  &__word {
+    margin-top: 18px;
+    font: 600 28px/1 $serif;
+    text-align: center;
+  }
+}
+
+@keyframes loader-spin {
+  to { transform: rotate(360deg); }
+}
+
+.buy {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-top: 30px;
+
+  .price { font: 600 42px/1 $serif; letter-spacing: -.02em; }
+  .was { font: 500 18px/1 $sans; opacity: .55; margin-right: 8px; }
+}

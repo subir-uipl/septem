@@ -1,0 +1,331 @@
+@use 'tokens' as *;
+
+// solid and above the canvas, so the 3D scene never shows through it
+.footer {
+  position: relative;
+  z-index: 5;
+  background: $footer;
+  color: $cream;
+
+  &__stripe {
+    display: flex;
+    height: 8px;
+    span { flex: 1; }
+  }
+
+  &__marquee {
+    overflow: hidden;
+    padding: 30px 0 34px;            // room below for italic descenders
+    border-top: 1px solid rgba($cream, .1);
+    border-bottom: 1px solid rgba($cream, .1);
+  }
+
+  &__track {
+    display: flex;
+    align-items: center;
+    width: max-content;
+    animation: marquee 42s linear infinite;
+
+    span {
+      font: italic 600 clamp(64px, 9vw, 140px)/1.15 $serif;
+      letter-spacing: -.03em;
+      padding: 0 .06em .12em;
+    }
+
+    i {
+      margin: 0 .55em;
+      font-style: normal;
+      font-size: 28px;
+      opacity: .35;
+    }
+  }
+
+  &__bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 26px $gutter 30px;
+    border-top: 1px solid rgba($cream, .1);
+    font-size: 13px;
+
+    > span { opacity: .55; }
+    .brand { font-size: 22px; }
+    .brand__mark { width: 24px; height: 24px; }
+  }
+
+  &__legal {
+    display: flex;
+    gap: 22px;
+    a:hover { opacity: 1; }
+  }
+
+  @include mobile {
+    &__bottom { flex-direction: column; align-items: flex-start; padding: 22px; }
+  }
+}
+
+// ---------- store locator ----------
+.locator {
+  display: grid;
+  grid-template-columns: minmax(300px, 380px) 1fr;
+  gap: 5vw;
+  align-items: center;
+  padding: 96px $gutter 80px;
+
+  .eyebrow { color: rgba($cream, .6); }
+
+  &__title {
+    margin: 18px 0 18px;
+    font: 600 clamp(48px, 5vw, 76px)/.98 $serif;
+    letter-spacing: -.03em;
+
+    em {
+      font-style: italic;
+      background: linear-gradient(90deg, #f2295e, #ff6a13, #ffc21a, #2fbf5b, #00b8b0, #4f5bff, #9b3df5);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      padding: 0 .08em .14em 0;
+    }
+  }
+
+  &__lead {
+    max-width: 340px;
+    font-size: 15px;
+    line-height: 1.65;
+    opacity: .7;
+  }
+
+  &__filters {
+    display: flex;
+    gap: 6px;
+    margin: 28px 0 14px;
+
+    button {
+      padding: 8px 16px;
+      border-radius: 999px;
+      border: 1px solid rgba($cream, .18);
+      font: 500 13px/1 $sans;
+      opacity: .75;
+      transition: background .3s, color .3s, opacity .3s;
+
+      &:hover { opacity: 1; }
+      &.is-on { background: $cream; color: $footer; opacity: 1; border-color: $cream; }
+    }
+  }
+
+  &__list {
+    max-height: 290px;
+    overflow-y: auto;
+    padding-right: 6px;
+    scrollbar-width: thin;
+    scrollbar-color: rgba($cream, .2) transparent;
+
+    button {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 11px 12px;
+      border-radius: 12px;
+      text-align: left;
+      transition: background .3s;
+
+      &:hover, &.is-on { background: rgba($cream, .07); }
+    }
+
+    i {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--c);
+      flex: none;
+      transition: transform .35s $ease, box-shadow .35s;
+    }
+
+    .is-on i { transform: scale(1.3); box-shadow: 0 0 0 5px color-mix(in srgb, var(--c) 25%, transparent); }
+
+    span {
+      flex: 1;
+      font-size: 13px;
+      opacity: .65;
+
+      b { display: block; font: 600 15px/1.3 $sans; opacity: 1; color: $cream; }
+    }
+
+    em { font: 600 11px/1 $sans; letter-spacing: .14em; font-style: normal; opacity: .45; }
+  }
+
+  &__map {
+    position: relative;
+
+    svg { display: block; width: 100%; height: auto; overflow: visible; }
+  }
+
+  // floating card next to the selected pin
+  &__card {
+    position: absolute;
+    z-index: 2;
+    width: 250px;
+    margin: -18px 0 0 26px;
+    padding: 18px 20px;
+    border-radius: 16px;
+    background: $cream;
+    color: $footer;
+    box-shadow: 0 24px 50px -18px rgba(0, 0, 0, .6);
+    pointer-events: none;
+    opacity: 0;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 20px;
+      right: 20px;
+      height: 4px;
+      border-radius: 0 0 4px 4px;
+      background: var(--c);
+    }
+
+    &.is-left { margin-left: -276px; }
+
+    .card__tag {
+      font: 600 10.5px/1 $sans;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--c);
+      filter: brightness(.8);
+    }
+
+    h4 { margin: 8px 0 6px; font: italic 600 22px/1.15 $serif; }
+    p { font-size: 13px; line-height: 1.5; opacity: .75; }
+    .card__hours { margin-top: 6px; font-weight: 600; opacity: .9; }
+    a { display: inline-block; margin-top: 10px; font: 600 13px/1 $sans; pointer-events: auto; }
+  }
+
+  @include mobile {
+    grid-template-columns: 1fr;
+    gap: 34px;
+    padding: 64px 22px 56px;
+
+    &__list { max-height: 240px; }
+    &__card { display: none; }
+  }
+}
+
+// dot-matrix map and pins
+#usMap {
+  .map__dots circle { fill: rgba($cream, .16); }
+
+  .pin {
+    cursor: pointer;
+    outline: none;
+    transition: opacity .4s;
+
+    &.is-dim { opacity: .18; pointer-events: none; }
+  }
+
+  .pin__dot { fill: var(--c); stroke: $footer; stroke-width: 3; }
+  // SVG transforms scale around the viewBox origin unless each circle uses its own box
+  .pin__ring { transform-box: fill-box; transform-origin: center; }
+  .pin__ring { fill: none; stroke: var(--c); stroke-width: 2; opacity: 0; transform: scale(.6); transition: opacity .35s, transform .45s $ease; }
+
+  .pin.is-on .pin__ring, .pin:hover .pin__ring, .pin:focus-visible .pin__ring { opacity: 1; transform: scale(1); }
+  .pin--flag .pin__dot { stroke-width: 4; }
+}
+
+// ---------- sign-off: newsletter + links ----------
+.signoff {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 6vw;
+  padding: 80px $gutter 72px;
+
+  &__news {
+    h3 {
+      font: 600 clamp(40px, 4.4vw, 64px)/1.02 $serif;
+      letter-spacing: -.03em;
+
+      em { font-style: italic; color: #ffc21a; padding-right: .06em; }
+    }
+
+    p { margin-top: 16px; max-width: 420px; font-size: 15px; line-height: 1.6; opacity: .65; }
+  }
+
+  &__links {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    align-content: start;
+    padding-top: 10px;
+
+    h4 {
+      margin-bottom: 16px;
+      font: 600 12px/1 $sans;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      opacity: .5;
+    }
+
+    a {
+      display: block;
+      margin-bottom: 12px;
+      font-size: 15px;
+      opacity: .85;
+      transition: opacity .25s, transform .3s $ease;
+
+      &:hover { opacity: 1; transform: translateX(3px); }
+    }
+  }
+
+  @include mobile {
+    grid-template-columns: 1fr;
+    gap: 44px;
+    padding: 56px 22px;
+
+    &__links { grid-template-columns: 1fr 1fr; }
+  }
+}
+
+.news {
+  display: flex;
+  max-width: 440px;
+  margin-top: 26px;
+  padding: 6px;
+  border-radius: 999px;
+  border: 1px solid rgba($cream, .2);
+  background: rgba($cream, .04);
+
+  input {
+    flex: 1;
+    min-width: 0;
+    padding: 0 18px;
+    background: none;
+    border: 0;
+    outline: none;
+    color: $cream;
+    font: 15px $sans;
+
+    &::placeholder { color: rgba($cream, .5); }
+  }
+
+  button {
+    padding: 14px 22px;
+    border-radius: 999px;
+    background: $cream;
+    color: $footer;
+    font: 600 14px/1 $sans;
+    transition: background .3s;
+
+    &:hover { background: #ffc21a; }
+  }
+}
+
+@keyframes marquee {
+  to { transform: translateX(-50%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .footer__track { animation: none; }
+}

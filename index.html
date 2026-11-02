@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Septem — Seven ways to melt</title>
+<meta name="description" content="Septem small-batch craft chocolate: seven colourful bars, from ruby raspberry to ube blackcurrant.">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <!-- logo: a heptagon cut into the seven flavour colours -->
+    <symbol id="mark" viewBox="0 0 24 24">
+      <g stroke="#fff3e3" stroke-width=".8" stroke-linejoin="round">
+        <path d="M12 12L12 1L20.6 5.14Z" fill="#f2295e"/>
+        <path d="M12 12L20.6 5.14L22.72 14.45Z" fill="#ff6a13"/>
+        <path d="M12 12L22.72 14.45L16.77 21.91Z" fill="#ffc21a"/>
+        <path d="M12 12L16.77 21.91L7.23 21.91Z" fill="#2fbf5b"/>
+        <path d="M12 12L7.23 21.91L1.28 14.45Z" fill="#00b8b0"/>
+        <path d="M12 12L1.28 14.45L3.4 5.14Z" fill="#4f5bff"/>
+        <path d="M12 12L3.4 5.14L12 1Z" fill="#9b3df5"/>
+      </g>
+      <circle cx="12" cy="12" r="3.4" fill="#fff3e3"/>
+    </symbol>
+    <symbol id="arrow-down" viewBox="0 0 24 24"><path d="M12 4.5v15M6 13.5l6 6 6-6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="arrow-right" viewBox="0 0 24 24"><path d="M4.5 12h15M13.5 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  </defs>
+</svg>
+
+<div class="loader" id="loader" aria-hidden="true">
+  <div>
+    <svg class="loader__mark"><use href="#mark"/></svg>
+    <p class="loader__word">Septem</p>
+  </div>
+</div>
+
+<div class="glow" id="glow" aria-hidden="true"><i style="--c:#f2295e"></i><i style="--c:#ffc21a"></i><i style="--c:#2fbf5b"></i><i style="--c:#00b8b0"></i><i style="--c:#4f5bff"></i><i style="--c:#9b3df5"></i></div>
+<div class="spot" id="spot" aria-hidden="true"></div>
+<canvas class="webgl" aria-hidden="true"></canvas>
+
+<header class="nav" id="nav">
+  <a class="brand" href="#hero" aria-label="Septem home"><svg class="brand__mark"><use href="#mark"/></svg><span>Septem</span></a>
+  <nav aria-label="Main">
+    <ul class="nav__links">
+      <li><a href="#ruby">Collection</a></li>
+      <li><a href="#box">Box of Seven</a></li>
+      <li><a href="#footer">Our Story</a></li>
+      <li><a href="#stockists">Stockists</a></li>
+    </ul>
+  </nav>
+  <a class="btn btn--sm nav__cta" href="#box">Shop the box</a>
+</header>
+
+<nav class="swatches" id="swatches" aria-label="Flavours"></nav>
+<div class="toast" id="toast" role="status" aria-live="polite"><i></i><span></span></div>
+<div class="cursor-tag" id="cursorTag" aria-hidden="true"><i></i><span></span><small></small></div>
+
+<main>
+  <section class="panel hero" id="hero">
+    <!-- the visible wordmark is drawn in 3D -->
+    <h1 class="sr-only">Septem craft chocolate</h1>
+    <div class="layer-front hero__front">
+      <div class="hero__tag" data-r>
+        <p class="hero__line">Seven ways to <em>melt.</em></p>
+        <p class="hero__meta">Hand-tempered craft chocolate · Est. 2026</p>
+      </div>
+      <nav class="hero__index" id="heroIndex" aria-label="The seven bars" data-r></nav>
+    </div>
+  </section>
+
+  <div id="products"></div>
+
+  <section class="panel box" id="box">
+    <div class="layer-front box__front">
+      <p class="eyebrow" data-r>The Box of Seven</p>
+      <h2 class="box__title" data-split>Taste all seven.</h2>
+      <p class="box__lead" data-r>One of every bar in a keepsake box, from bright Ruby to deep Velvet. The easiest gift you’ll ever give.</p>
+      <div class="buy" data-r>
+        <span class="price">$59</span><s class="was">$63</s>
+        <button class="btn" data-add="Box of Seven" data-color="#2a160c">Shop the box <svg class="ico"><use href="#arrow-right"/></svg></button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer" id="footer">
+  <div class="footer__stripe" aria-hidden="true">
+    <span style="background:#f2295e"></span><span style="background:#ff6a13"></span><span style="background:#ffc21a"></span><span style="background:#2fbf5b"></span><span style="background:#00b8b0"></span><span style="background:#4f5bff"></span><span style="background:#9b3df5"></span>
+  </div>
+
+  <section class="locator" id="stockists" aria-labelledby="locatorTitle">
+    <div class="locator__intro">
+      <p class="eyebrow">Stockists</p>
+      <h3 class="locator__title" id="locatorTitle">Find Septem<br><em>near you.</em></h3>
+      <p class="locator__lead">Made in our New York kitchen, travelling to twelve independent shops across the States.</p>
+      <div class="locator__filters" id="storeFilters" aria-label="Filter by region"></div>
+      <ul class="locator__list" id="storeList"></ul>
+    </div>
+    <div class="locator__map">
+      <svg id="usMap" role="img" aria-label="Map of Septem stockists in the United States"></svg>
+      <div class="locator__card" id="storeCard" aria-live="polite"></div>
+    </div>
+  </section>
+
+  <div class="footer__marquee" aria-hidden="true"><div class="footer__track"></div></div>
+
+  <div class="signoff">
+    <div class="signoff__news">
+      <h3>Be first to taste <em>the eighth.</em></h3>
+      <p>New flavours, small-batch drops and kitchen news. About once a month.</p>
+      <form class="news">
+        <input type="email" placeholder="Your email address" aria-label="Email address" required>
+        <button type="submit">Join the list</button>
+      </form>
+    </div>
+    <nav class="signoff__links" aria-label="Footer">
+      <div><h4>Shop</h4><a href="#ruby">All seven bars</a><a href="#box">Box of Seven</a><a href="#box">Gift cards</a><a href="#footer">Wholesale</a></div>
+      <div><h4>Septem</h4><a href="#footer">Our story</a><a href="#stockists">Stockists</a><a href="#footer">Journal</a><a href="#footer">Contact</a></div>
+      <div><h4>Follow</h4><a href="#footer">Instagram</a><a href="#footer">TikTok</a><a href="#footer">Pinterest</a></div>
+    </nav>
+  </div>
+
+  <div class="footer__bottom">
+    <a class="brand" href="#hero"><svg class="brand__mark"><use href="#mark"/></svg><span>Septem</span></a>
+    <span>© 2026 Septem Chocolate Co. · A concept demo</span>
+    <span class="footer__legal"><a href="#footer">Privacy</a><a href="#footer">Terms</a><a href="#footer">Accessibility</a></span>
+  </div>
+</footer>
+
+<script type="module" src="/src/main.js"></script>
+</body>
+</html>

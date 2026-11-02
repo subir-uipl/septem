@@ -1,0 +1,22 @@
+$serif: 'Fraunces', Georgia, serif;
+$sans: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+$cream: #fff3e3;
+$cocoa: #2a160c;
+$footer: #1f110a;
+
+$ease: cubic-bezier(.2, .7, .2, 1);
+$gutter: 6vw;
+
+@mixin mobile {
+  @media (max-width: 820px) { @content; }
+}
+
+// hairline in the current text colour, so it adapts to every section's palette
+@mixin soft-border($amount: 30%, $side: null) {
+  @if $side {
+    border-#{$side}: 1.5px solid color-mix(in srgb, currentColor #{$amount}, transparent);
+  } @else {
+    border: 1.5px solid color-mix(in srgb, currentColor #{$amount}, transparent);
+  }
+}

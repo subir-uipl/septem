@@ -1,0 +1,129 @@
+@use 'tokens' as *;
+
+// the wordmark and bars are both drawn by the canvas; this layer only holds the tagline and index,
+// and it sits beneath the canvas so the chocolates always pass in front of it
+.hero {
+  > .layer-front { z-index: 1; }
+
+  &__tag {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 13vh;
+    text-align: center;
+    pointer-events: none;
+  }
+
+  &__line {
+    font: italic 500 clamp(30px, 3.3vw, 52px)/1.1 $serif;
+    letter-spacing: -.02em;
+
+    // "melt." picks up all seven flavour colours
+    em {
+      font-weight: 600;
+      background: linear-gradient(90deg, #f2295e, #ff6a13, #ffc21a, #2fbf5b, #00b8b0, #4f5bff, #9b3df5);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      padding-right: .06em;
+    }
+  }
+
+  &__meta {
+    margin-top: 12px;
+    font: 600 11px/1 $sans;
+    letter-spacing: .28em;
+    text-transform: uppercase;
+    opacity: .6;
+  }
+
+  // numbered flavour index along the bottom edge; hovering an entry lifts its bar
+  &__index {
+    position: absolute;
+    left: $gutter;
+    right: $gutter;
+    bottom: 3.5vh;
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    @include soft-border(22%, top);
+
+    a {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 16px 0 4px;
+      font: 500 14px/1 $sans;
+      opacity: .7;
+      transition: opacity .3s;
+
+      &::before {
+        content: '';
+        position: absolute;
+        top: -1.5px;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background: var(--c);
+        transition: width .55s $ease;
+      }
+
+      &:hover, &.is-hot { opacity: 1; }
+      &:hover::before, &.is-hot::before { width: 100%; }
+      &:hover i, &.is-hot i { transform: scale(1.6); }
+    }
+
+    i {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--c);
+      transition: transform .4s $ease;
+    }
+
+    b {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .1em;
+      opacity: .55;
+    }
+  }
+
+  @include mobile {
+    &__tag { bottom: 12svh; }
+    &__line { font-size: 30px; }
+    &__meta { font-size: 10px; letter-spacing: .2em; }
+
+    &__index {
+      left: 22px;
+      right: 22px;
+
+      a { justify-content: center; gap: 6px; }
+      span { display: none; }
+    }
+  }
+}
+
+// small label that follows the cursor over a bar
+.cursor-tag {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 25;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--bg);
+  font: 600 13px/1 $sans;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .25s;
+
+  &.is-on { opacity: 1; }
+  i { width: 10px; height: 10px; border-radius: 50%; }
+  small { font-weight: 500; opacity: .7; }
+}

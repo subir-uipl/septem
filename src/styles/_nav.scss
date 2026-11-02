@@ -1,0 +1,67 @@
+@use 'tokens' as *;
+
+.nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 20;
+  height: 84px;
+  padding: 0 5vw;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  color: var(--ink);
+  transition: height .45s $ease, background .45s, backdrop-filter .45s;
+
+  &.is-scrolled {
+    height: 66px;
+    background: color-mix(in srgb, var(--bg) 70%, transparent);
+    backdrop-filter: blur(16px) saturate(150%);
+    -webkit-backdrop-filter: blur(16px) saturate(150%);
+  }
+
+  // over the dark footer the nav flips to cream-on-cocoa
+  &.is-dark {
+    --ink: #{$cream};
+    --bg: #{$footer};
+  }
+
+  .brand { justify-self: start; }
+
+  &__links {
+    display: flex;
+    gap: 6px;
+    font: 500 14px/1 $sans;
+
+    a {
+      position: relative;
+      display: block;
+      padding: 10px 16px;
+
+      &::after {
+        content: '';
+        position: absolute;
+        left: 16px;
+        right: 16px;
+        bottom: 2px;
+        height: 1.5px;
+        background: currentColor;
+        transform: scaleX(0);
+        transition: transform .45s $ease;
+      }
+
+      &:hover::after { transform: scaleX(1); }
+    }
+  }
+
+  &__cta { justify-self: end; }
+
+  @include mobile {
+    height: 70px;
+    padding: 0 20px;
+    grid-template-columns: 1fr auto;
+
+    > nav { display: none; }
+  }
+}

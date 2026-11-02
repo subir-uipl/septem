@@ -1,0 +1,48 @@
+// Full-screen background layers behind the canvas. They are fixed (never tied to a section's box),
+// and their opacity is driven by the scroll timeline, so colour changes between sections stay seamless.
+
+// soft, slowly drifting colour blooms, shown in the cream sections (hero and box)
+.glow {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+
+  i {
+    position: absolute;
+    width: 36vw;
+    height: 36vw;
+    border-radius: 50%;
+    background: var(--c);
+    opacity: .38;
+    filter: blur(90px);
+    will-change: transform;
+    animation: glow-drift 18s ease-in-out infinite alternate;
+
+    &:nth-child(1) { left: -8vw; top: -6vh; }
+    &:nth-child(2) { left: 26vw; top: -14vh; animation-delay: -4s; }
+    &:nth-child(3) { right: 18vw; top: 6vh; animation-delay: -8s; }
+    &:nth-child(4) { right: -10vw; top: 38vh; animation-delay: -2s; }
+    &:nth-child(5) { left: 12vw; bottom: -18vh; animation-delay: -6s; }
+    &:nth-child(6) { right: 30vw; bottom: -22vh; animation-delay: -10s; }
+  }
+}
+
+// soft light behind the bar in the product sections; --sx moves it to the side the bar stands on
+.spot {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(40vw 46vw at var(--sx, 72%) 52%, rgba(255, 255, 255, .3), transparent 72%);
+}
+
+@keyframes glow-drift {
+  to { transform: translate(5vw, -4vh) scale(1.18); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .glow i { animation: none; }
+}
